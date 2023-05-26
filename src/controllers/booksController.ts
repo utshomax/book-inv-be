@@ -4,8 +4,31 @@ import { EUnit, TBook } from "types/books";
 
 export const fetchAllBooks = async (req : Request , res : Response , next :NextFunction) =>{
     //get books from book table of mongodb
-    let result = await Book.find();
-    res.json(result);
+    let {sortByLowStockAlert} = req.query;
+    
+    //sort based on low stock alert
+    if(sortByLowStockAlert){
+        let result = await Book.aggregate([
+          {
+            $match: {
+              "stock.enableLowStockAlert": true,
+              $expr: { $gte: ["$stock.lowStockAlertQuantity", "$stock.quantity"] }
+            }
+          },
+          {
+            $sort: {
+              "stock.quantity": 1
+            }
+          }
+        ])
+        res.json(result);
+      }
+      else{
+        let result = await Book.find();
+        res.json(result);
+      }
+    //let result = await Book.find();
+
 }
 
 export const createBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -67,3 +90,18 @@ export const createBook = async (req: Request, res: Response, next: NextFunction
       next(error);
     }
   };
+
+
+  //Detete a book
+  export const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+      const book_id = req.params.id;
+      const deletedBook = await Book.findByIdAndDelete(book_id);
+      res.json({
+        message : "Book deleted successfully",
+      })
+    }
+    catch(error){
+      next(error);
+    }
+  }

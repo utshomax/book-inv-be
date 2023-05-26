@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBook, fetchAllBooks, updateBook } from "../../controllers/booksController"
+import { createBook, deleteBook, fetchAllBooks, updateBook } from "../../controllers/booksController"
 
 const router: Router = Router();
 
@@ -23,5 +23,10 @@ router.put("/:id", async (req, res , next) => {
     return updateBookResponse
 });
 
+router.delete("/:id", async (req, res , next) => {
+    //delete a book
+    let deleteBookResponse = await deleteBook(req, res,next);
+    return deleteBookResponse
+});
 
 export default router;
