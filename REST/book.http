@@ -1,0 +1,27 @@
+//Get all books
+GET http://localhost:5000/api/book
+
+###
+
+//create a book
+POST  http://localhost:5000/api/book
+content-type: application/json
+
+{ "name": "The Alchemist",
+  "image": "https://images-na.ssl-images-amazon.com/images/I/51ZU%2BCvkTyL._SX331_BO1,204,203,200_.jpg",
+  "category": "fantasy",
+  "code": 123456,
+  "description": "The Alchemist is a novel by Brazilian author Paulo Coelho that was first published in 1988. Originally written in Portuguese, it became a widely translated international bestseller.",
+  "price": {
+    "price": 10,
+    "tax": 0.5,
+    "discount": 0.5
+  },
+  "stock": {
+    "unit": "piece",
+    "quantity": 100,
+    "date": "2021-05-06",
+    "enableLowStockAlert": true,
+    "lowStockAlertQuantity": 10
+  }
+}
